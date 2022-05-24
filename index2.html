@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/popper.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#dangki").click(function () {
+                $("#myModal").modal();
+            });
+
+            $("#today").html(new Date().toLocaleDateString());
+            // Kiểm tra tính hợp lệ họ tên
+
+            function kthoten() {
+                var hoten = $("#txtTen").val();
+                var regex = /([A-Z]{1}[a-z]+)((\s{1}[A-Z]{1}[a-z]+){1,})$/;
+                if (hoten.trim() === '') {
+                    $("#tbTen").html("bac buoc nhap");
+                    return false;
+                }
+
+                if (!regex.test(hoten)) {
+                    $("#tbTen").html("nhaap sai mau");
+                    return false;
+                }
+                $("#tbTen").html("*");
+                return true;
+            }
+
+            //kiểm tra  sô áo
+            function ktSoAo() {
+                var Ao = $("#txtSoAo").val();
+                var regexSoAo=/^[1-9]{1}$/;
+                if (Ao.trim() === '') {
+                    $("#tbSoAo").html("bac buoc nhap");
+                    return false;
+                }
+
+                if (!regexSoAo.test(Ao)) {
+                    $("#tbSoAo").html("nhaap sai mau");
+                    return false;
+                }
+                $("#tbSoAo").html("*");
+                return true;
+            }
+
+            //kiểm tra tính hợp lệ của câu lạc bộ
+            function ktCBL() {
+                var cbl = $("#txtCBL").val();
+                var regexCBL = /([A-Z]{1}[a-z]+)((\s{1}[A-Z]{1}[a-z]+){1,})(\s{1}[1-9]{1})$/;
+                if (cbl.trim() === '') {
+                    $("#tbCBL").html("bắc buộc nhập");
+                    return false;
+                }
+
+                if (!regexCBL.test(cbl)) {
+                    $("#tbCBL").html("nhaap sai mau");
+                    return false;
+                }
+
+                // var dongia = parseInt(giatour);
+                // if (dongia <= 0) {
+                //     $("#tbGiaTour").html("Giá tour > 0");
+                //     return false;
+                // }
+
+                $("#tbCBL").html("*");
+                return true;
+            }
+            //Kiểm tra ngày tập trung
+            function ktDate() {
+                var today= new Date();
+                var ngayhientai=today.getDate();
+                var date = $("#txtDate").val().split('/');
+                var d = parseInt(date[0], 10)
+                var m = parseInt(date[1], 10)
+                var y = parseInt(date[2], 10)
+                var datee = new Date(y,m-1,d);
+            
+                if ( datee.getDate() - ngayhientai < 15 ) {
+                    $("#tbDate").html("nhaap sai mau");
+                    return false;
+                }
+                $("#tbDate").html("*");
+                return true;
+            }
+
+            //Kiểm tra hình ảnh
+            function ktsdt() {
+                var sdt = $("#txtsdt").val();
+                var regexsdt=/[09][0-9]{8}$/;
+                if (sdt === '') {
+                    $("#tbsdt").html("nhaapj sdt");
+                    return false;
+                }
+                if (!regexsdt.test(sdt)) {
+                    $("#tbsdt").html("nhaap sai mau");
+                    return false;
+                }
+
+
+                $("#tbsdt").html("*");
+                return true;
+            }
+
+            function ktHinhAnh() {
+                var hinhanh = $("#txtHinhAnh").val();
+                if (hinhanh === '') {
+                    $("#tbHinhAnh").html("Phải chọn hình ảnh đại diện");
+                    return false;
+                }
+
+                $("#tbHinhAnh").html("*");
+                return true;
+            }
+
+            $("#txtTen").blur(kthoten);
+            $("#txtSoAo").blur(ktSoAo);
+            $("#txtCBL").blur(ktCBL);
+            $("#txtDate").blur(ktDate);
+            $("#txtsdt").blur(ktsdt);
+            $("#txtHinhAnh").focusout(ktHinhAnh);
+
+
+            var i = 1;
+
+            $("#btnLuu").click(function () {
+
+                if (!kthoten() || !ktSoAo() || !ktCBL() || !ktDate() || !ktsdt() || !ktHinhAnh())
+                    return false;
+
+                var ten = $("#txtTen").val();
+                var soao = $("#txtSoAo").val();
+                var cbl = $("#txtCBL").val();
+                var ngay = $("#txtDate").val();
+                var sdt = $("#txtsdt").val();
+                var hinhanh = $("#txtHinhAnh").val();
+
+                var row = "<tr><td>" + i + "</td><td>" + ten + "</td><td>" + soao + "</td><td>" + cbl + "</td><td>" + ngay + "</td><td>" + sdt + "</td><td>" + hinhanh + "</td></tr>";
+                $("tbody").append(row);
+                i++;
+                $("#myModal").modal("hide"); //Đóng modal
+                $("#frm1").trigger("reset") //Reset form về trạng thái ban đầu
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="row card" id="header">
+             <img class="w-100" src="../img/Header.PNG" alt="logo"> 
+            
+            <!-- <div class="card-img-overlay">
+                <img height="170" width="170" class="rounded-circle" src="../img/logo.PNG" alt="logo">
+            </div> -->
+        </div>
+
+        <!-- Menu bar -->
+        <div class="row navbar navbar-expand-lg navbar-light bg-success">
+
+            <div class="navbar-brand text-uppercase text-white">option</div>
+
+             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#myMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+
+            <div class="collapse navbar-collapse" id="myMenu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link">Đăng nhập</a></li>
+                    <li class="nav-item" id="dangki"><a class="nav-link">đăng Kí</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div class="row border">
+            <div class="col-12">
+                <h2 class="text-center">DANH SÁCH ĐỘI TUYỂN VIỆT NAM
+                </h2>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>HỌ TÊN</th>
+                            <th>SỐ ÁO</th>
+                            <th>CÂU LẠC BỘ</th>
+                            <th>NGÀY TẬP TRUNG</th>
+                            <th>ĐIỆN THOẠI</th>
+                            <th>ẢNH ĐẠI DIỆN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="row bg-light border" id="footer">
+            <div class="col-12 my-auto">
+                <p class="text-primary text-center pt-2">Your Information</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100">THÔNG TIN CÁ NHÂN</h4>
+                    <button class="close" type="button" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="frm1">
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtTen">Ho Ten </label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtTen" class="form-control" placeholder="nhap ho ten">
+                                <span id="tbTen" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtSoAo">SỐ ÁO </label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtSoAo" class="form-control"
+                                    value="nhap số áo">
+                                <span id="tbSoAo" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtCBL">Câu Lạc Bộ </label>
+                            <div class="col-lg-8">
+                                <input placeholder="nhập câu lạc bộ.." type="text" id="txtCBL" class="form-control">
+                                <span id="tbCBL" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtDate">Ngày tập trung </label>
+                            <div class="col-lg-8">
+                                <input type="date" id="txtDate" class="form-control" >
+                                <span id="tbDate" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtsdt">SDT </label>
+                            <div class="col-lg-8">
+                                <input type="text" id="txtsdt" class="form-control" value="xxxx-xxx-xxx">
+                                <span id="tbsdt" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-row">
+                            <label class="col-lg-4" for="txtHinhAnh">Hình đại diện: </label>
+                            <div class="col-lg-8">
+                                <input type="file" id="txtHinhAnh" class="form-control"
+                                    accept=".jpg, .gif, .png">
+                                <span id="tbHinhAnh" class="text-danger font-italic">*</span>
+                            </div>
+                        </div>
+
+                        <button id="btnLuu" type="button" class="btn btn-success btn-block">Lưu</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p id="today">today</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
